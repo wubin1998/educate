@@ -24,7 +24,7 @@ export default {
   methods: {
     dayjs,
     getData() {
-      fetch('http://localhost:3000/log')
+      fetch('/log')
       .then(res => {
         return res.json()
       })

@@ -35,7 +35,7 @@ export default {
 
   methods: {
     handleCreateTask() {
-      fetch("http://localhost:3000/task/new", {
+      fetch("/task/new", {
         method: 'post',
         body: JSON.stringify({ taskName: this.taskName, star: this.star }),
         headers: {

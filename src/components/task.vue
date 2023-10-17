@@ -1,21 +1,21 @@
 <template>
   <div class="content">
-    <div class="content-item" v-for="(task, index) in taskList" :key="index">
+    <div class="content-item" v-for="(task, index) in data.taskList" :key="index">
       <div class="content-flex-head">
         <div class="flex align-center" style="width: 90%;;">
           <div class="icon-task"></div>
           <div class="content-text">{{ task.taskName }}</div>
         </div>
         <div  class="flex align-center">
-          <button @click="handleTaskDelete(task.id)">删除</button>
-          <button @click="handleTaskDone(task.id)">完成</button>
+          <button @click="handleTaskDelete(task.id)" v-if="isAdmin">删除</button>
+          <button @click="handleTaskDone(task.id)" v-if="isAdmin">完成</button>
           <div>{{ task.isDone ? '1' : '0' }}/1</div>
           <div style="margin-left: 10px;" class="icon-star"></div>X{{ task.star }}
         </div>
       </div>
     </div>
 
-    <div class="not-task" v-if="taskList.length <= 0">暂无任务</div>
+    <div class="not-task" v-if="data.taskList.length <= 0">暂无任务</div>
 
   </div>
 </template>
@@ -23,6 +23,8 @@
 <script>
 export default {
   name: 'EducateTask',
+
+  props: ['data'],
 
   data() {
     return {
@@ -32,12 +34,11 @@ export default {
   },
 
   mounted() {
-    this.getData()
   },
 
   methods: {
     handleTaskDone(id) {
-      fetch('http://localhost:3000/task/done?id=' + id)
+      fetch('/task/done?id=' + id)
       .then(res => res.json())
       .then(res => {
         alert(res.msg)
@@ -47,23 +48,13 @@ export default {
     },
 
     handleTaskDelete(id) {
-      fetch('http://localhost:3000/task/delete?id=' + id)
+      fetch('/task/delete?id=' + id)
       .then(res => res.json())
       .then(() => {
         this.getData()
         this.$emit('update')
       })
     },
-
-    getData() {
-      fetch('http://localhost:3000/task')
-      .then(res => {
-        return res.json()
-      })
-      .then(res => {
-        this.taskList = res.task
-      })
-    }
   },
 };
 </script>

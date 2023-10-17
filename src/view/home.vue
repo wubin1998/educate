@@ -21,7 +21,7 @@
           v-for="menu in menus" :key="menu.code">{{ menu.name }}</div>
       </div>
 
-      <Task v-if="menusActive === 2" @update="getData"></Task>
+      <Task v-if="menusActive === 2" @update="getData" :data="data"></Task>
       <Reward v-if="menusActive === 3" @onReward="getData"></Reward>
       <CreateTask v-if="menusActive === 4"></CreateTask>
       <RewardLog v-if="menusActive === 5"></RewardLog>
@@ -60,6 +60,7 @@ export default {
       diamond: 0,
       menusActive: 5,
       menus,
+      data: { taskList: [] }
     };
   },
 
@@ -76,13 +77,18 @@ export default {
 
   methods: {
     getData() {
-      fetch('http://localhost:3000/data').then(res => {
+      fetch('/data').then(res => {
         return res.json()
       }).then(res => {
         const { star, diamond } = res;
         this.star = star,
         this.diamond = diamond
+        this.data = res;
       })
+
+      setTimeout(() => {
+        this.getData()
+      }, 5000);
     }
   },
 };

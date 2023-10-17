@@ -38,7 +38,7 @@ export default {
       const res = confirm("是否兑换？")
       
       if (res) {
-        fetch(`http://localhost:3000/reward?star=${reward.price}&diamond=${reward.diamond}&name=${reward.name}`)
+        fetch(`/reward?star=${reward.price}&diamond=${reward.diamond}&name=${reward.name}`)
         .then(res => {
           return res.json()
         }).then(res => {
