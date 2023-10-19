@@ -10,21 +10,22 @@
 </template>
 
 <script>
+import { getReward } from '@/server'
 export default {
   name: 'EducateReward',
 
   data() {
     return {
       rewardBg: [
-        { icon: require('../assets/reward-1.jpeg'), price: 100, name: '礼物' },
-        { icon: require('../assets/reward-2.jpeg'), price: 100, name: '星星瓶'},
-        { icon: require('../assets/reward-3.png'), price: 100, name: '雪糕' },
-        { icon: require('../assets/reward-4.jpeg'), price: 100, name: '' },
-        { icon: require('../assets/reward-5.png'), price: 100 },
-        { icon: require('../assets/reward-6.jpeg'), price: 100 },
-        { icon: require('../assets/reward-7.jpeg'), price: 100 },
-        { icon: require('../assets/reward-8.jpeg'), price: 100 },
-        { icon: require('../assets/diamond.png'), price: 1000, diamond: 1, name: '钻石' },
+        { icon: require('../assets/reward-1.jpeg'), price: 10, name: '礼物' },
+        { icon: require('../assets/reward-2.jpeg'), price: 10, name: '星星瓶'},
+        { icon: require('../assets/reward-3.png'), price: 10, name: '雪糕' },
+        { icon: require('../assets/reward-4.jpeg'), price: 10, name: '糖果' },
+        { icon: require('../assets/reward-5.png'), price: 10, name: '仙女棒' },
+        { icon: require('../assets/reward-6.jpeg'), price: 10, name: '糖果枪' },
+        { icon: require('../assets/reward-7.jpeg'), price: 10, name: '奶茶' },
+        { icon: require('../assets/reward-8.jpeg'), price: 10, name: '蜡烛' },
+        { icon: require('../assets/diamond.png'), price: 10, diamond: 1, name: '钻石' },
       ]
     };
   },
@@ -38,7 +39,7 @@ export default {
       const res = confirm("是否兑换？")
       
       if (res) {
-        fetch(`/reward?star=${reward.price}&diamond=${reward.diamond}&name=${reward.name}`)
+        getReward(reward)
         .then(res => {
           return res.json()
         }).then(res => {
@@ -58,10 +59,15 @@ export default {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: space-between;
   overflow-y: auto;
   height: 100%;
   padding: 10px;
+}
+.reward::after {
+  content: '';
+  display: block;
+  flex: auto;
 }
 .reward-item {
   width: 14rem;

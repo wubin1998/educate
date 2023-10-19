@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { taskDone, taskDelete } from '@/server'
 export default {
   name: 'EducateTask',
 
@@ -38,20 +39,18 @@ export default {
 
   methods: {
     handleTaskDone(id) {
-      fetch('/task/done?id=' + id)
+      taskDone(id)
       .then(res => res.json())
       .then(res => {
         alert(res.msg)
-        this.getData()
         this.$emit('update')
       })
     },
 
     handleTaskDelete(id) {
-      fetch('/task/delete?id=' + id)
+      taskDelete(id)
       .then(res => res.json())
       .then(() => {
-        this.getData()
         this.$emit('update')
       })
     },

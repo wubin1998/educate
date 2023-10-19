@@ -1,6 +1,9 @@
 <template>
   <div>
     <div class="header">
+      <div class="time">
+        {{ time }}
+      </div>
       <div class="star-box">
         <div class="icon-star"></div>
         <div>{{ star }}</div>
@@ -20,10 +23,10 @@
           :class="{'active': menusActive === menu.code}" 
           v-for="menu in menus" :key="menu.code">{{ menu.name }}</div>
       </div>
-
+      <Timetable v-if="menusActive === 1"></Timetable>
       <Task v-if="menusActive === 2" @update="getData" :data="data"></Task>
       <Reward v-if="menusActive === 3" @onReward="getData"></Reward>
-      <CreateTask v-if="menusActive === 4"></CreateTask>
+      <CreateTask v-if="menusActive === 4" :data="data"></CreateTask>
       <RewardLog v-if="menusActive === 5"></RewardLog>
     </div>
   </div>
@@ -34,6 +37,9 @@ import Task from '../components/task'
 import CreateTask from '../components/createTask.vue'
 import Reward from '../components/reward'
 import RewardLog from '@/components/rewardLog.vue';
+import Timetable from '@/components/timetable.vue';
+import { getData } from '@/server'
+import dayjs from 'dayjs';
 
 export default {
   name: 'EducateHome',
@@ -57,8 +63,9 @@ export default {
     return {
       isAdmin,
       star: 0,
+      time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       diamond: 0,
-      menusActive: 5,
+      menusActive: 1,
       menus,
       data: { taskList: [] }
     };
@@ -68,22 +75,31 @@ export default {
     Task,
     Reward,
     CreateTask,
+    Timetable,
     RewardLog
   },
 
   mounted() {
     this.getData()
+    this.updateTime()
   },
 
   methods: {
+    updateTime() {
+      this.time = dayjs().format('YYYY-MM-DD HH:mm:ss')
+      setTimeout(() => {
+        this.updateTime()
+      }, 1000)
+    },
+
     getData() {
-      fetch('/data').then(res => {
+      getData().then(res => {
         return res.json()
       }).then(res => {
-        const { star, diamond } = res;
+        const { star, diamond, task } = res;
         this.star = star,
         this.diamond = diamond
-        this.data = res;
+        this.data.taskList = task;
       })
 
       setTimeout(() => {
@@ -96,6 +112,10 @@ export default {
 
 <style scoped>
 
+.time {
+  color: #443535c7;
+  font-size: 18px;
+}
 .box {
   position: absolute;
   left: calc(50% - 3rem);

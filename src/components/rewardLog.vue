@@ -7,6 +7,7 @@
 
 <script>
 import dayjs from 'dayjs';
+import { getLog } from '@/server'
 
 export default {
   name: 'EducateRewardLog',
@@ -24,7 +25,7 @@ export default {
   methods: {
     dayjs,
     getData() {
-      fetch('/log')
+      getLog()
       .then(res => {
         return res.json()
       })
